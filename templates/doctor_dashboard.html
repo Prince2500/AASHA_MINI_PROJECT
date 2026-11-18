@@ -1,0 +1,263 @@
+{% extends "base.html" %}
+
+{% block title %}Doctor Command Center – {{ doctor.hospital_centre }} | AASHA{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4">
+
+  <!-- Doctor Header Banner -->
+  <div class="card border-0 shadow-sm p-4 mb-4" style="background: linear-gradient(135deg, #E0F2FE 0%, #FFFFFF 100%); border-radius: 14px;">
+    <div class="row align-items-center gy-3">
+      <div class="col-md-8">
+        <div class="d-flex align-items-center gap-3">
+          <div class="stat-icon blue" style="width: 60px; height: 60px; font-size: 1.8rem;">
+            <i class="bi bi-hospital"></i>
+          </div>
+          <div>
+            <div class="d-flex align-items-center gap-2">
+              <h3 class="fw-bold text-dark mb-0">{{ user.full_name }}</h3>
+              <span class="badge bg-primary text-white">{{ doctor.reg_number }}</span>
+            </div>
+            <p class="text-muted small mb-0 mt-1">
+              <strong>{{ doctor.specialisation }}</strong> &bull; {{ doctor.hospital_centre }} &bull; Ph: {{ user.phone }}
+            </p>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4 text-md-end">
+        <div class="badge bg-white text-primary border shadow-sm p-2 text-start">
+          <div class="small fw-semibold"><i class="bi bi-people-fill text-success me-1"></i> Active ASHA Field Network</div>
+          <div class="fs-6 fw-bold text-dark">{{ total_assigned_workers }} Assigned Workers Connected</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Priority & Clinical Triage Metric Cards -->
+  <div class="row g-3 mb-4">
+    <!-- Urgent Metric (Prominently Highlighted) -->
+    <div class="col-sm-6 col-lg-3">
+      <a href="{{ url_for('doctor.dashboard', priority='Urgent') }}" class="text-decoration-none">
+        <div class="stat-card border-danger shadow-sm {% if urgent_count > 0 %}pulse-urgent{% endif %}" style="background: #FFF5F5;">
+          <div class="stat-icon red">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+          </div>
+          <div>
+            <div class="stat-value text-danger">{{ urgent_count }}</div>
+            <div class="stat-label text-danger fw-bold">Urgent Cases (Review Now)</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Moderate Metric -->
+    <div class="col-sm-6 col-lg-3">
+      <a href="{{ url_for('doctor.dashboard', priority='Moderate') }}" class="text-decoration-none">
+        <div class="stat-card border-warning shadow-sm" style="background: #FFFDF0;">
+          <div class="stat-icon amber">
+            <i class="bi bi-clock-history"></i>
+          </div>
+          <div>
+            <div class="stat-value text-warning-emphasis">{{ moderate_count }}</div>
+            <div class="stat-label text-muted">Moderate Cases</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Routine Metric -->
+    <div class="col-sm-6 col-lg-3">
+      <a href="{{ url_for('doctor.dashboard', priority='Routine') }}" class="text-decoration-none">
+        <div class="stat-card shadow-sm">
+          <div class="stat-icon green">
+            <i class="bi bi-shield-check"></i>
+          </div>
+          <div>
+            <div class="stat-value text-success">{{ routine_count }}</div>
+            <div class="stat-label text-muted">Routine Cases</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!-- Pending Review Metric -->
+    <div class="col-sm-6 col-lg-3">
+      <a href="{{ url_for('doctor.dashboard', status='Pending Review') }}" class="text-decoration-none">
+        <div class="stat-card shadow-sm">
+          <div class="stat-icon blue">
+            <i class="bi bi-inbox-fill"></i>
+          </div>
+          <div>
+            <div class="stat-value text-primary">{{ pending_count }}</div>
+            <div class="stat-label text-muted">Pending Doctor Review</div>
+          </div>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <!-- Filter & Search Controls Bar -->
+  <div class="card card-aasha p-3 mb-4 shadow-sm">
+    <form method="GET" action="{{ url_for('doctor.dashboard') }}" class="row g-2 align-items-center">
+      
+      <!-- Priority Filter -->
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label small fw-semibold text-muted mb-1">Priority Level</label>
+        <select name="priority" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all" {% if priority_filter == 'all' %}selected{% endif %}>All Priorities</option>
+          <option value="Urgent" {% if priority_filter == 'Urgent' %}selected{% endif %}>🚨 Urgent Only</option>
+          <option value="Moderate" {% if priority_filter == 'Moderate' %}selected{% endif %}>⏳ Moderate Only</option>
+          <option value="Routine" {% if priority_filter == 'Routine' %}selected{% endif %}>✅ Routine Only</option>
+        </select>
+      </div>
+
+      <!-- Case Status Filter -->
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label small fw-semibold text-muted mb-1">Case Status</label>
+        <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all" {% if status_filter == 'all' %}selected{% endif %}>All Case Statuses</option>
+          <option value="Pending Review" {% if status_filter == 'Pending Review' %}selected{% endif %}>Pending Review</option>
+          <option value="Guidance Sent" {% if status_filter == 'Guidance Sent' %}selected{% endif %}>Guidance Transmitted</option>
+          <option value="Action Taken" {% if status_filter == 'Action Taken' %}selected{% endif %}>Action Taken</option>
+          <option value="Resolved" {% if status_filter == 'Resolved' %}selected{% endif %}>Resolved</option>
+        </select>
+      </div>
+
+      <!-- ASHA Worker Filter -->
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label small fw-semibold text-muted mb-1">ASHA Worker</label>
+        <select name="worker" class="form-select form-select-sm" onchange="this.form.submit()">
+          <option value="all" {% if worker_filter == 'all' %}selected{% endif %}>All Assigned Workers</option>
+          {% for w in assigned_workers %}
+            <option value="{{ w.id }}" {% if worker_filter == w.id|string %}selected{% endif %}>{{ w.user.full_name }} ({{ w.village }})</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <!-- Search Box -->
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label small fw-semibold text-muted mb-1">Search Patient</label>
+        <div class="input-group input-group-sm">
+          <input type="text" name="q" value="{{ search_query }}" class="form-control" placeholder="Name or ID...">
+          <button class="btn btn-outline-secondary" type="submit"><i class="bi bi-search"></i></button>
+          {% if priority_filter != 'all' or status_filter != 'all' or worker_filter != 'all' or search_query %}
+            <a href="{{ url_for('doctor.dashboard') }}" class="btn btn-outline-danger" title="Clear Filters"><i class="bi bi-x-lg"></i></a>
+          {% endif %}
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <!-- Prioritized Patient Reports Table -->
+  <div class="card card-aasha shadow-sm">
+    <div class="card-header-aasha d-flex justify-content-between align-items-center">
+      <div class="d-flex align-items-center gap-2">
+        <i class="bi bi-list-task"></i>
+        <span>Clinical Triage Queue ({{ reports|length }} Reports)</span>
+      </div>
+      <span class="small text-muted">Sorted by Urgency & Recency</span>
+    </div>
+    
+    <div class="card-body p-0">
+      {% if reports %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr class="small text-muted">
+                <th style="width: 140px;">Patient ID</th>
+                <th>Patient Details</th>
+                <th>Reporting ASHA Worker</th>
+                <th>Symptoms & Extracted Signs</th>
+                <th>Smart Triage Priority</th>
+                <th>Date / Time</th>
+                <th>Case Status</th>
+                <th class="text-end">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for rep in reports %}
+                <tr class="{% if rep.priority == 'Urgent' and rep.case_status == 'Pending Review' %}table-danger{% elif rep.priority == 'Urgent' %}table-danger-subtle{% endif %}">
+                  <td>
+                    <span class="badge bg-light text-dark border font-monospace p-2">{{ rep.patient.patient_id_code }}</span>
+                  </td>
+                  <td>
+                    <div class="fw-bold text-dark">{{ rep.patient.name }}</div>
+                    <div class="small text-muted">{{ rep.patient.age }} yrs &bull; {{ rep.patient.gender }} &bull; {{ rep.patient.village }}</div>
+                    {% if rep.patient.pregnancy_status and rep.patient.pregnancy_status not in ['Not Pregnant', 'Not Applicable'] %}
+                      <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle" style="font-size: 0.7rem;">
+                        <i class="bi bi-gender-female me-1"></i> {{ rep.patient.pregnancy_status }}
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <div class="fw-semibold text-dark">{{ rep.asha_worker.user.full_name }}</div>
+                    <div class="small text-muted"><i class="bi bi-geo-alt"></i> {{ rep.asha_worker.village }}</div>
+                  </td>
+                  <td style="max-width: 240px;">
+                    {% if rep.ai_summary and rep.ai_summary.symptoms_list %}
+                      <div class="d-flex flex-wrap gap-1 mb-1">
+                        {% for sym in rep.ai_summary.symptoms_list %}
+                          <span class="badge bg-light text-dark border small">{{ sym }}</span>
+                        {% endfor %}
+                      </div>
+                    {% endif %}
+                    {% if rep.ai_summary and rep.ai_summary.warning_signs_list %}
+                      <div class="small text-danger fw-semibold">
+                        <i class="bi bi-exclamation-circle-fill me-1"></i> {{ rep.ai_summary.warning_signs_list[0] }}
+                      </div>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {% if rep.priority == 'Urgent' %}
+                      <span class="badge-priority badge-urgent {% if rep.case_status == 'Pending Review' %}pulse-urgent{% endif %}">
+                        <i class="bi bi-exclamation-triangle-fill"></i> Urgent
+                      </span>
+                    {% elif rep.priority == 'Moderate' %}
+                      <span class="badge-priority badge-moderate">
+                        <i class="bi bi-clock-history"></i> Moderate
+                      </span>
+                    {% else %}
+                      <span class="badge-priority badge-routine">
+                        <i class="bi bi-shield-check"></i> Routine
+                      </span>
+                    {% endif %}
+                  </td>
+                  <td class="small text-muted">
+                    {{ rep.created_at.strftime('%d-%b-%Y') }}<br>
+                    <strong>{{ rep.created_at.strftime('%I:%M %p') }}</strong>
+                  </td>
+                  <td>
+                    {% if rep.case_status == 'Pending Review' %}
+                      <span class="badge bg-danger text-white p-2">Pending Review</span>
+                    {% elif rep.case_status == 'Guidance Sent' %}
+                      <span class="badge bg-info-subtle text-info-emphasis border border-info-subtle p-2">Guidance Sent</span>
+                    {% elif rep.case_status == 'Action Taken' %}
+                      <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle p-2">Action Taken</span>
+                    {% elif rep.case_status == 'Resolved' %}
+                      <span class="badge bg-success-subtle text-success border border-success-subtle p-2">Resolved</span>
+                    {% else %}
+                      <span class="badge bg-light text-dark border p-2">{{ rep.case_status }}</span>
+                    {% endif %}
+                  </td>
+                  <td class="text-end">
+                    <a href="{{ url_for('reports.view_report', report_id=rep.id) }}" class="btn btn-sm {% if rep.case_status == 'Pending Review' and rep.priority == 'Urgent' %}btn-danger pulse-urgent{% else %}btn-primary{% endif %} py-1 px-3" style="{% if rep.case_status != 'Pending Review' or rep.priority != 'Urgent' %}background-color: #0369A1; border: none;{% endif %}">
+                      <i class="bi bi-clipboard2-pulse me-1"></i> Review & Respond
+                    </a>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-clipboard-check fs-1 d-block mb-2 text-muted"></i>
+          <h5>No patient reports found matching current filters</h5>
+          <p class="small">When your assigned ASHA workers submit voice notes, prioritized cases will appear here.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

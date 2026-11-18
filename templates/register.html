@@ -1,0 +1,176 @@
+{% extends "base.html" %}
+
+{% block title %}Register – AASHA Healthcare Platform{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-9 col-lg-7">
+      
+      <div class="card card-aasha p-4 p-md-5 shadow-sm">
+        <div class="text-center mb-4">
+          <div class="stat-icon green mx-auto mb-2" style="width: 54px; height: 54px;">
+            <i class="bi bi-person-plus-fill"></i>
+          </div>
+          <h3 class="fw-bold text-dark mb-1">Create AASHA Account</h3>
+          <p class="text-muted small">Register to connect rural field healthcare with clinical oversight</p>
+
+          <!-- Role Toggle Tabs -->
+          <ul class="nav nav-pills nav-fill bg-light p-1 rounded-pill mt-3" id="roleTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+              <button class="nav-link active rounded-pill fw-bold" id="worker-tab" data-bs-toggle="pill" data-bs-target="#worker-pane" type="button" role="tab" onclick="setRole('asha_worker')">
+                <i class="bi bi-person-heart me-1"></i> ASHA Worker
+              </button>
+            </li>
+            <li class="nav-item" role="presentation">
+              <button class="nav-link rounded-pill fw-bold" id="doctor-tab" data-bs-toggle="pill" data-bs-target="#doctor-pane" type="button" role="tab" onclick="setRole('doctor')">
+                <i class="bi bi-hospital me-1"></i> Medical Officer / Doctor
+              </button>
+            </li>
+          </ul>
+        </div>
+
+        <form method="POST" action="{{ url_for('auth.register') }}" id="registerForm">
+          <input type="hidden" name="role" id="formRole" value="asha_worker">
+
+          <!-- Shared Basic Information -->
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Full Name <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-person"></i></span>
+                <input type="text" name="full_name" class="form-control" placeholder="e.g. Smt. Savita Devi" required>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Phone Number <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-phone"></i></span>
+                <input type="tel" name="phone" class="form-control" placeholder="+91 98765 00000" required>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Email Address <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-envelope"></i></span>
+                <input type="email" name="email" class="form-control" placeholder="worker@aasha.in" required>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Password <span class="text-danger">*</span></label>
+              <div class="input-group">
+                <span class="input-group-text bg-light"><i class="bi bi-lock"></i></span>
+                <input type="password" name="password" class="form-control" placeholder="Minimum 6 characters" required>
+              </div>
+            </div>
+          </div>
+
+          <!-- Tab Specific Fields -->
+          <div class="tab-content" id="rolePanes">
+            <!-- ASHA Worker Specific Section -->
+            <div class="tab-pane fade show active" id="worker-pane" role="tabpanel">
+              <div class="p-3 mb-3 rounded-3" style="background-color: var(--aasha-light-green);">
+                <div class="fw-bold text-success mb-2 small"><i class="bi bi-geo-alt-fill me-1"></i> ASHA Jurisdiction & Assigned Doctor</div>
+                
+                <div class="row g-2 mb-2">
+                  <div class="col-md-4">
+                    <label class="form-label small fw-semibold">Village / Gram Panchayat</label>
+                    <input type="text" name="village" id="workerVillage" class="form-control form-control-sm" placeholder="Village name">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-semibold">District</label>
+                    <input type="text" name="district" id="workerDistrict" class="form-control form-control-sm" placeholder="District name">
+                  </div>
+                  <div class="col-md-4">
+                    <label class="form-label small fw-semibold">State</label>
+                    <input type="text" name="state" id="workerState" class="form-control form-control-sm" placeholder="State (e.g. Uttar Pradesh)">
+                  </div>
+                </div>
+
+                <div class="mt-2">
+                  <label class="form-label small fw-semibold">Connect to Assigned Doctor / PHC</label>
+                  <select name="assigned_doctor_id" class="form-select form-select-sm">
+                    <option value="">-- Select Assigned Medical Officer --</option>
+                    {% for doc in doctors %}
+                      <option value="{{ doc.id }}">{{ doc.user.full_name }} ({{ doc.specialisation }} - {{ doc.hospital_centre }})</option>
+                    {% endfor %}
+                  </select>
+                  <div class="form-text text-muted" style="font-size: 0.74rem;">Every ASHA worker is linked to their designated PHC/CHC doctor for rapid one-to-one reviews.</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Doctor Specific Section -->
+            <div class="tab-pane fade" id="doctor-pane" role="tabpanel">
+              <div class="p-3 mb-3 rounded-3" style="background-color: #E0F2FE;">
+                <div class="fw-bold text-primary mb-2 small"><i class="bi bi-hospital me-1"></i> Doctor Credentials & Hospital Affiliation</div>
+
+                <div class="row g-2">
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Medical Registration Number (MCI / State Council)</label>
+                    <input type="text" name="reg_number" id="docRegNumber" class="form-control form-control-sm" placeholder="e.g. MCI-12345-UP">
+                  </div>
+                  <div class="col-md-6">
+                    <label class="form-label small fw-semibold">Specialisation</label>
+                    <input type="text" name="specialisation" id="docSpec" class="form-control form-control-sm" placeholder="e.g. General Medicine / Obstetrics">
+                  </div>
+                  <div class="col-12 mt-2">
+                    <label class="form-label small fw-semibold">Primary Health Centre / Hospital Name</label>
+                    <input type="text" name="hospital_centre" id="docHospital" class="form-control form-control-sm" placeholder="e.g. Rupaidiha Primary Health Centre (PHC)">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-aasha py-2 fw-bold" id="submitRegBtn">
+              <i class="bi bi-check-circle-fill me-1"></i> Complete Registration
+            </button>
+          </div>
+
+          <div class="text-center pt-3 mt-3 border-top">
+            <span class="small text-muted">Already registered on AASHA?</span>
+            <a href="{{ url_for('auth.login') }}" class="small fw-bold text-success text-decoration-none ms-1">
+              Sign In Here
+            </a>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function setRole(role) {
+  document.getElementById('formRole').value = role;
+  const btn = document.getElementById('submitRegBtn');
+  if (role === 'doctor') {
+    btn.className = 'btn btn-primary py-2 fw-bold';
+    btn.style.backgroundColor = '#0369A1';
+  } else {
+    btn.className = 'btn btn-aasha py-2 fw-bold';
+    btn.style.backgroundColor = '';
+  }
+}
+
+// Auto select role tab if URL query string has ?role=doctor
+document.addEventListener('DOMContentLoaded', function() {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('role') === 'doctor') {
+    const docTab = document.getElementById('doctor-tab');
+    if (docTab) {
+      const tab = new bootstrap.Tab(docTab);
+      tab.show();
+      setRole('doctor');
+    }
+  }
+});
+</script>
+{% endblock %}

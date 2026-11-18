@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Register New Patient – AASHA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-7">
+      
+      <div class="card card-aasha p-4 shadow-sm">
+        <div class="d-flex align-items-center gap-3 border-bottom pb-3 mb-4">
+          <div class="stat-icon green" style="width: 50px; height: 50px;">
+            <i class="bi bi-person-plus-fill"></i>
+          </div>
+          <div>
+            <h4 class="fw-bold text-dark mb-0">Register New Patient</h4>
+            <small class="text-muted">Enter basic details to generate digital health card for field monitoring</small>
+          </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('patients.register_patient') }}">
+          <div class="row g-3">
+            
+            <!-- Patient Name -->
+            <div class="col-md-8">
+              <label class="form-label fw-semibold small">Patient Full Name <span class="text-danger">*</span></label>
+              <input type="text" name="name" class="form-control" placeholder="e.g. Ramesh Kumar / Sita Devi" required autofocus>
+            </div>
+
+            <!-- Age -->
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">Age (Years) <span class="text-danger">*</span></label>
+              <input type="number" name="age" class="form-control" min="0" max="120" placeholder="e.g. 28" required>
+            </div>
+
+            <!-- Gender -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Gender <span class="text-danger">*</span></label>
+              <select name="gender" id="genderSelect" class="form-select" onchange="togglePregnancyField()">
+                <option value="Female" selected>Female</option>
+                <option value="Male">Male</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+
+            <!-- Phone -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Mobile Number (Optional)</label>
+              <input type="tel" name="phone" class="form-control" placeholder="+91 98765 00000">
+            </div>
+
+            <!-- Village -->
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Village / Hamlet</label>
+              <input type="text" name="village" class="form-control" value="{{ worker.village }}" placeholder="Village name">
+            </div>
+
+            <!-- Pregnancy Status (Conditional on Female) -->
+            <div class="col-md-6" id="pregnancyFieldGroup">
+              <label class="form-label fw-semibold small">Pregnancy / Maternal Status</label>
+              <select name="pregnancy_status" class="form-select">
+                <option value="Not Pregnant">Not Pregnant</option>
+                <option value="Pregnant - 1st Trimester (1-12 wks)">Pregnant - 1st Trimester (1-12 wks)</option>
+                <option value="Pregnant - 2nd Trimester (13-27 wks)">Pregnant - 2nd Trimester (13-27 wks)</option>
+                <option value="Pregnant - 3rd Trimester (28-40 wks)">Pregnant - 3rd Trimester (28-40 wks)</option>
+                <option value="Lactating Mother (< 6 months)">Lactating Mother (< 6 months)</option>
+              </select>
+            </div>
+
+            <!-- Existing Medical Conditions -->
+            <div class="col-12">
+              <label class="form-label fw-semibold small">Pre-existing Conditions / Medical History</label>
+              <textarea name="medical_conditions" class="form-control" rows="2" placeholder="e.g. Hypertension, Diabetes, Asthma, Previous Cesarean, None reported"></textarea>
+              <div class="form-text text-muted" style="font-size: 0.74rem;">Note any known chronic conditions or past surgical history.</div>
+            </div>
+
+          </div>
+
+          <!-- Submission Buttons -->
+          <div class="d-flex flex-wrap gap-2 justify-content-end mt-4 pt-3 border-top">
+            <a href="{{ url_for('worker.dashboard') }}" class="btn btn-outline-secondary">
+              Cancel
+            </a>
+            <button type="submit" name="save_only" class="btn btn-outline-success">
+              <i class="bi bi-save me-1"></i> Register Patient
+            </button>
+            <button type="submit" name="record_now" value="true" class="btn btn-aasha">
+              <i class="bi bi-mic-fill me-1"></i> Register & Record Voice Now
+            </button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+function togglePregnancyField() {
+  const gender = document.getElementById('genderSelect').value;
+  const pregGroup = document.getElementById('pregnancyFieldGroup');
+  if (gender === 'Male') {
+    pregGroup.style.display = 'none';
+  } else {
+    pregGroup.style.display = 'block';
+  }
+}
+</script>
+{% endblock %}

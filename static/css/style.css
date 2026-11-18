@@ -1,0 +1,431 @@
+/* ==========================================================================
+   AASHA – AI Voice Assistant for Rural Healthcare
+   Theme Palette:
+   - Primary Dark Green: #146B45
+   - Primary Light Green: #E8F5EC
+   - Surface Light Grey: #F5F7F6
+   - Pure White: #FFFFFF
+   - Urgent Alert: #DC2626 / #EF4444
+   - Moderate Alert: #D97706
+   ========================================================================== */
+
+:root {
+  --aasha-primary: #146B45;
+  --aasha-primary-hover: #0E4E32;
+  --aasha-light-green: #E8F5EC;
+  --aasha-light-green-subtle: #F0F9F3;
+  --aasha-bg-grey: #F5F7F6;
+  --aasha-text-dark: #1E293B;
+  --aasha-text-muted: #64748B;
+  --aasha-border: #E2E8F0;
+  
+  --priority-urgent-bg: #FEE2E2;
+  --priority-urgent-text: #991B1B;
+  --priority-urgent-border: #EF4444;
+  
+  --priority-moderate-bg: #FEF3C7;
+  --priority-moderate-text: #92400E;
+  --priority-moderate-border: #F59E0B;
+  
+  --priority-routine-bg: #DCFCE7;
+  --priority-routine-text: #166534;
+  --priority-routine-border: #22C55E;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, Helvetica, Arial, sans-serif;
+  background-color: var(--aasha-bg-grey);
+  color: var(--aasha-text-dark);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+/* Navbar */
+.navbar-aasha {
+  background-color: var(--aasha-primary);
+  box-shadow: 0 2px 10px rgba(20, 107, 69, 0.15);
+  padding: 0.8rem 1rem;
+}
+
+.navbar-aasha .navbar-brand {
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: #FFFFFF !important;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.brand-badge {
+  font-size: 0.72rem;
+  background-color: rgba(255, 255, 255, 0.22);
+  color: #FFFFFF;
+  padding: 0.2rem 0.6rem;
+  border-radius: 9999px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+.nav-link-aasha {
+  color: rgba(255, 255, 255, 0.9) !important;
+  font-weight: 500;
+  padding: 0.5rem 0.9rem !important;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+}
+
+.nav-link-aasha:hover, .nav-link-aasha.active {
+  color: #FFFFFF !important;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+/* User Pill in Navbar */
+.user-pill {
+  background-color: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  padding: 0.35rem 0.8rem;
+  border-radius: 50px;
+  color: #FFFFFF;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.88rem;
+}
+
+.user-role-badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  padding: 0.15rem 0.45rem;
+  border-radius: 4px;
+}
+.user-role-badge.worker {
+  background-color: #FEF08A;
+  color: #854D0E;
+}
+.user-role-badge.doctor {
+  background-color: #BAE6FD;
+  color: #0369A1;
+}
+
+/* Cards & Layout */
+.card-aasha {
+  background: #FFFFFF;
+  border: 1px solid var(--aasha-border);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card-aasha:hover {
+  box-shadow: 0 6px 16px rgba(0,0,0,0.07);
+}
+
+.card-header-aasha {
+  background-color: var(--aasha-light-green);
+  color: var(--aasha-primary);
+  font-weight: 600;
+  border-bottom: 1px solid #D1E7DD;
+  border-radius: 12px 12px 0 0 !important;
+  padding: 0.9rem 1.25rem;
+}
+
+/* Buttons */
+.btn-aasha {
+  background-color: var(--aasha-primary);
+  color: #FFFFFF;
+  border: none;
+  font-weight: 600;
+  padding: 0.55rem 1.35rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-aasha:hover, .btn-aasha:focus {
+  background-color: var(--aasha-primary-hover);
+  color: #FFFFFF;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(20, 107, 69, 0.25);
+}
+
+.btn-outline-aasha {
+  border: 2px solid var(--aasha-primary);
+  color: var(--aasha-primary);
+  background: transparent;
+  font-weight: 600;
+  padding: 0.5rem 1.2rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-aasha:hover {
+  background-color: var(--aasha-primary);
+  color: #FFFFFF;
+}
+
+/* Metric / Stat Cards */
+.stat-card {
+  padding: 1.25rem;
+  border-radius: 12px;
+  border: 1px solid var(--aasha-border);
+  background: #FFFFFF;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stat-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+.stat-icon.green {
+  background-color: var(--aasha-light-green);
+  color: var(--aasha-primary);
+}
+.stat-icon.red {
+  background-color: var(--priority-urgent-bg);
+  color: var(--priority-urgent-text);
+}
+.stat-icon.amber {
+  background-color: var(--priority-moderate-bg);
+  color: var(--priority-moderate-text);
+}
+.stat-icon.blue {
+  background-color: #E0F2FE;
+  color: #0369A1;
+}
+
+.stat-value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1.1;
+  color: var(--aasha-text-dark);
+}
+
+.stat-label {
+  font-size: 0.85rem;
+  color: var(--aasha-text-muted);
+  font-weight: 500;
+}
+
+/* Priority Badges */
+.badge-priority {
+  font-weight: 700;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.82rem;
+}
+
+.badge-urgent {
+  background-color: var(--priority-urgent-bg);
+  color: var(--priority-urgent-text);
+  border: 1px solid var(--priority-urgent-border);
+}
+
+.badge-moderate {
+  background-color: var(--priority-moderate-bg);
+  color: var(--priority-moderate-text);
+  border: 1px solid var(--priority-moderate-border);
+}
+
+.badge-routine {
+  background-color: var(--priority-routine-bg);
+  color: var(--priority-routine-text);
+  border: 1px solid var(--priority-routine-border);
+}
+
+/* Urgent Pulse Animation */
+.pulse-urgent {
+  animation: pulse-red 1.8s infinite;
+}
+
+@keyframes pulse-red {
+  0% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0);
+  }
+}
+
+.pulse-dot {
+  display: inline-block;
+  width: 8px;
+  height: 8px;
+  background-color: #DC2626;
+  border-radius: 50%;
+  margin-right: 4px;
+  animation: blink 1.2s infinite;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Status Badges */
+.badge-status {
+  padding: 0.35rem 0.7rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+.badge-status-pending {
+  background-color: #FEF3C7;
+  color: #92400E;
+}
+.badge-status-guidance {
+  background-color: #E0E7FF;
+  color: #3730A3;
+}
+.badge-status-resolved {
+  background-color: #DCFCE7;
+  color: #166534;
+}
+
+/* Voice Studio Styles */
+.mic-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2.5rem 1.5rem;
+  background: linear-gradient(180deg, #FFFFFF 0%, var(--aasha-light-green-subtle) 100%);
+  border-radius: 16px;
+  border: 2px dashed #C6E7D2;
+}
+
+.btn-mic {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: var(--aasha-primary);
+  color: #FFFFFF;
+  border: 4px solid #A7F3D0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(20, 107, 69, 0.3);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-mic:hover {
+  transform: scale(1.06);
+  background: var(--aasha-primary-hover);
+  color: #FFFFFF;
+}
+
+.btn-mic.recording {
+  background-color: #DC2626 !important;
+  border-color: #FECACA !important;
+  animation: mic-recording-pulse 1.3s infinite;
+}
+
+@keyframes mic-recording-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7);
+    transform: scale(1.02);
+  }
+  50% {
+    box-shadow: 0 0 0 16px rgba(220, 38, 38, 0);
+    transform: scale(1.08);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 38, 38, 0);
+    transform: scale(1.02);
+  }
+}
+
+.wave-animation {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  margin-top: 1rem;
+}
+
+.wave-bar {
+  width: 5px;
+  background: var(--aasha-primary);
+  border-radius: 3px;
+  height: 8px;
+  animation: wave 1.2s ease-in-out infinite alternate;
+}
+
+.wave-bar:nth-child(2) { animation-delay: 0.2s; height: 16px; }
+.wave-bar:nth-child(3) { animation-delay: 0.4s; height: 28px; }
+.wave-bar:nth-child(4) { animation-delay: 0.1s; height: 22px; }
+.wave-bar:nth-child(5) { animation-delay: 0.3s; height: 14px; }
+
+@keyframes wave {
+  0% { height: 6px; }
+  100% { height: 32px; }
+}
+
+/* Clinical Banner Alert */
+.clinical-disclaimer {
+  background-color: #FFFBEB;
+  border-left: 4px solid #F59E0B;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  font-size: 0.82rem;
+  color: #92400E;
+}
+
+/* Timeline */
+.timeline-item {
+  position: relative;
+  padding-left: 2rem;
+  margin-bottom: 1.5rem;
+  border-left: 2px solid var(--aasha-light-green);
+}
+
+.timeline-item:last-child {
+  border-left: 2px solid transparent;
+}
+
+.timeline-dot {
+  position: absolute;
+  left: -9px;
+  top: 0;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--aasha-primary);
+  border: 3px solid #FFFFFF;
+  box-shadow: 0 0 0 2px var(--aasha-primary);
+}
+
+.timeline-dot.urgent {
+  background: #DC2626;
+  box-shadow: 0 0 0 2px #DC2626;
+}
+
+/* Footer */
+.footer-aasha {
+  background-color: #FFFFFF;
+  border-top: 1px solid var(--aasha-border);
+  padding: 1.5rem 0;
+  margin-top: auto;
+  font-size: 0.85rem;
+  color: var(--aasha-text-muted);
+}

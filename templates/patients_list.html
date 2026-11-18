@@ -1,0 +1,111 @@
+{% extends "base.html" %}
+
+{% block title %}Patient Directory – AASHA{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-4">
+
+  <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+    <div>
+      <h3 class="fw-bold text-dark mb-0">Registered Patient Directory</h3>
+      <p class="text-muted small mb-0">Digital records for community health tracking and longitudinal follow-up</p>
+    </div>
+    {% if session.get('role') == 'asha_worker' %}
+      <a href="{{ url_for('patients.register_patient') }}" class="btn btn-aasha">
+        <i class="bi bi-person-plus-fill me-1"></i> Register New Patient
+      </a>
+    {% endif %}
+  </div>
+
+  <div class="card card-aasha shadow-sm">
+    <div class="card-body p-0">
+      {% if patients %}
+        <div class="table-responsive">
+          <table class="table table-hover align-middle mb-0">
+            <thead class="table-light">
+              <tr class="small text-muted">
+                <th>Patient ID</th>
+                <th>Patient Name</th>
+                <th>Age / Gender</th>
+                <th>Village</th>
+                <th>Maternal / Health Status</th>
+                <th>Medical Conditions</th>
+                <th>Voice Reports</th>
+                <th>Registration Date</th>
+                <th class="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in patients %}
+                <tr>
+                  <td>
+                    <span class="badge bg-light text-dark border font-monospace">{{ p.patient_id_code }}</span>
+                  </td>
+                  <td>
+                    <a href="{{ url_for('patients.view_patient', patient_id=p.id) }}" class="fw-bold text-dark text-decoration-none">
+                      {{ p.name }}
+                    </a>
+                    {% if p.phone %}
+                      <div class="small text-muted"><i class="bi bi-telephone"></i> {{ p.phone }}</div>
+                    {% endif %}
+                  </td>
+                  <td>
+                    {{ p.age }} yrs &bull; {{ p.gender }}
+                  </td>
+                  <td>
+                    {{ p.village }}
+                  </td>
+                  <td>
+                    {% if p.pregnancy_status and p.pregnancy_status not in ['Not Pregnant', 'Not Applicable'] %}
+                      <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle">
+                        <i class="bi bi-gender-female me-1"></i> {{ p.pregnancy_status }}
+                      </span>
+                    {% else %}
+                      <span class="text-muted small">{{ p.pregnancy_status or 'N/A' }}</span>
+                    {% endif %}
+                  </td>
+                  <td style="max-width: 200px;">
+                    <span class="small text-muted">{{ p.medical_conditions or 'None reported' }}</span>
+                  </td>
+                  <td>
+                    <span class="badge bg-light text-primary border fw-semibold">
+                      {{ p.reports.count() }} Reports
+                    </span>
+                  </td>
+                  <td class="small text-muted">
+                    {{ p.created_at.strftime('%d-%b-%Y') }}
+                  </td>
+                  <td class="text-end">
+                    <div class="btn-group btn-group-sm">
+                      <a href="{{ url_for('patients.view_patient', patient_id=p.id) }}" class="btn btn-outline-secondary" title="View Patient Timeline">
+                        <i class="bi bi-clock-history me-1"></i> History
+                      </a>
+                      {% if session.get('role') == 'asha_worker' %}
+                        <a href="{{ url_for('reports.record_voice', patient_id=p.id) }}" class="btn btn-outline-success" title="Record Voice">
+                          <i class="bi bi-mic-fill me-1"></i> Record
+                        </a>
+                      {% endif %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% else %}
+        <div class="text-center py-5 text-muted">
+          <i class="bi bi-people fs-1 d-block mb-2 text-muted"></i>
+          <h5>No patients found</h5>
+          <p class="small">Register villagers to begin voice-based health documentation and doctor collaboration.</p>
+          {% if session.get('role') == 'asha_worker' %}
+            <a href="{{ url_for('patients.register_patient') }}" class="btn btn-aasha btn-sm">
+              <i class="bi bi-person-plus-fill me-1"></i> Register First Patient
+            </a>
+          {% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

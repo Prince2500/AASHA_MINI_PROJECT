@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+
+{% block title %}AASHA – AI Voice Assistant for Rural Healthcare{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-lg-5">
+  
+  <!-- Hero Section -->
+  <div class="row align-items-center py-5 gy-4">
+    <div class="col-lg-7">
+      <div class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill mb-3 fw-semibold">
+        <i class="bi bi-mic-fill me-1"></i> Designed for Rural Healthcare & ASHA Workers
+      </div>
+      <h1 class="display-4 fw-bold text-dark mb-3" style="letter-spacing: -0.5px;">
+        <span style="color: var(--aasha-primary);">AASHA</span><br>
+        <span class="fs-2 text-secondary fw-normal">AI Voice Assistant for Rural Healthcare</span>
+      </h1>
+      <p class="fs-4 fw-semibold text-success mb-3">
+        "Voice for the Worker. Intelligence for the Workflow."
+      </p>
+      <p class="lead text-muted mb-4" style="max-width: 650px;">
+        Turning a field worker's natural voice into structured patient summaries, smart clinical triage, and instantaneous one-to-one doctor communication.
+      </p>
+
+      <!-- Role Selection Call-to-Action -->
+      <div class="card p-3 p-md-4 shadow-sm border-0 mb-4" style="background-color: var(--aasha-light-green); border-radius: 16px;">
+        <h5 class="fw-bold text-success mb-2"><i class="bi bi-person-badge me-2"></i>Select Your Role to Enter Portal:</h5>
+        <p class="text-muted small mb-3">Choose whether you are operating as an Accredited Social Health Activist (ASHA) or a Primary Care Doctor:</p>
+        
+        <div class="row g-3">
+          <div class="col-sm-6">
+            <div class="card h-100 p-3 border-0 shadow-sm bg-white text-center">
+              <div class="stat-icon green mx-auto mb-2">
+                <i class="bi bi-person-heart"></i>
+              </div>
+              <h6 class="fw-bold mb-1">ASHA Worker</h6>
+              <p class="text-muted small mb-3">Record natural voice notes, register villagers, get doctor guidance.</p>
+              <div class="d-grid gap-2">
+                <a href="{{ url_for('auth.login') }}?role=asha_worker" class="btn btn-aasha btn-sm">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Worker Login
+                </a>
+                <a href="{{ url_for('auth.register') }}?role=asha_worker" class="btn btn-outline-secondary btn-sm">
+                  Register as Worker
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="card h-100 p-3 border-0 shadow-sm bg-white text-center">
+              <div class="stat-icon blue mx-auto mb-2">
+                <i class="bi bi-hospital"></i>
+              </div>
+              <h6 class="fw-bold mb-1">Medical Officer / Doctor</h6>
+              <p class="text-muted small mb-3">Triage prioritized urgent cases, review patient voice, transmit care.</p>
+              <div class="d-grid gap-2">
+                <a href="{{ url_for('auth.login') }}?role=doctor" class="btn btn-primary btn-sm" style="background-color: #0369A1; border: none;">
+                  <i class="bi bi-box-arrow-in-right me-1"></i> Doctor Login
+                </a>
+                <a href="{{ url_for('auth.register') }}?role=doctor" class="btn btn-outline-secondary btn-sm">
+                  Register as Doctor
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 1-Click Evaluator Demo Section -->
+        <div class="mt-3 pt-3 border-top d-flex flex-wrap align-items-center justify-content-between gap-2">
+          <span class="small fw-bold text-dark">
+            <i class="bi bi-lightning-charge-fill text-warning me-1"></i> Immediate 1-Click Demo Logins:
+          </span>
+          <div class="d-flex gap-2">
+            <a href="{{ url_for('auth.demo_login', role='worker') }}" class="btn btn-sm btn-outline-success">
+              <i class="bi bi-person-check-fill me-1"></i> Demo ASHA Worker
+            </a>
+            <a href="{{ url_for('auth.demo_login', role='doctor') }}" class="btn btn-sm btn-outline-primary">
+              <i class="bi bi-shield-plus me-1"></i> Demo Doctor
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Visual Interactive Hero Infographic -->
+    <div class="col-lg-5">
+      <div class="card card-aasha p-4 shadow-lg border-0" style="background: linear-gradient(145deg, #ffffff 0%, var(--aasha-light-green-subtle) 100%);">
+        <div class="d-flex align-items-center justify-content-between border-bottom pb-3 mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <span class="stat-icon green" style="width: 40px; height: 40px; font-size: 1.2rem;">
+              <i class="bi bi-activity"></i>
+            </span>
+            <div>
+              <div class="fw-bold text-dark">AASHA Live Field Loop</div>
+              <small class="text-muted">Speak &rarr; Understand &rarr; Prioritize &rarr; Connect</small>
+            </div>
+          </div>
+          <span class="badge bg-danger pulse-urgent text-white">Live Workflow</span>
+        </div>
+
+        <!-- Interactive workflow steps -->
+        <div class="p-3 bg-white rounded-3 border mb-3 shadow-sm">
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-success rounded-circle p-2">1</span>
+            <div>
+              <div class="fw-bold small text-dark"><i class="bi bi-mic me-1 text-success"></i> Field Voice Capture</div>
+              <div class="text-muted" style="font-size: 0.78rem;">"Patient has high fever since yesterday and breathing difficulty."</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-white rounded-3 border mb-3 shadow-sm">
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-primary rounded-circle p-2">2</span>
+            <div>
+              <div class="fw-bold small text-dark"><i class="bi bi-cpu me-1 text-primary"></i> AI Extraction & Smart Triage</div>
+              <div class="text-muted" style="font-size: 0.78rem;">Symptoms parsed: High Fever, Dyspnea &bull; Priority: <span class="badge bg-danger text-white">Urgent</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-white rounded-3 border shadow-sm">
+          <div class="d-flex align-items-center gap-3">
+            <span class="badge bg-info rounded-circle p-2 text-white">3</span>
+            <div>
+              <div class="fw-bold small text-dark"><i class="bi bi-chat-heart me-1 text-info"></i> Doctor Direction Back to Worker</div>
+              <div class="text-muted" style="font-size: 0.78rem;">Dr. Sharma transmits guidance: "Keep propped up, call 108 ambulance."</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- The 4 Pillars Section (As shown in PDF) -->
+  <div class="py-5" id="how-it-works">
+    <div class="text-center mb-5">
+      <h2 class="fw-bold text-dark">How AASHA Works</h2>
+      <p class="text-muted">Overcoming paperwork delays and connecting rural communities to clinical care.</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-3">
+        <div class="card h-100 card-aasha p-4 text-center">
+          <div class="stat-icon green mx-auto mb-3">
+            <i class="bi bi-mic"></i>
+          </div>
+          <h5 class="fw-bold mb-2">1. VOICE</h5>
+          <p class="text-muted small mb-0">
+            Speak naturally in local languages (Hindi, Hinglish, English). Zero cumbersome form typing during busy field rounds.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card h-100 card-aasha p-4 text-center">
+          <div class="stat-icon blue mx-auto mb-3">
+            <i class="bi bi-robot"></i>
+          </div>
+          <h5 class="fw-bold mb-2">2. AI</h5>
+          <p class="text-muted small mb-0">
+            Transcribes spoken notes, extracts symptoms, duration, observations, pregnancy notes, and formats clean structured summaries.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card h-100 card-aasha p-4 text-center">
+          <div class="stat-icon red mx-auto mb-3">
+            <i class="bi bi-exclamation-octagon"></i>
+          </div>
+          <h5 class="fw-bold mb-2">3. TRIAGE</h5>
+          <p class="text-muted small mb-0">
+            Rule-based clinical engine flags warning signs into Urgent, Moderate, or Routine tiers, surfacing high-risk emergencies immediately.
+          </p>
+        </div>
+      </div>
+
+      <div class="col-md-3">
+        <div class="card h-100 card-aasha p-4 text-center">
+          <div class="stat-icon green mx-auto mb-3" style="background-color: #ECFDF5; color: #047857;">
+            <i class="bi bi-hospital"></i>
+          </div>
+          <h5 class="fw-bold mb-2">4. CARE</h5>
+          <p class="text-muted small mb-0">
+            Dedicated Primary Health Centre doctor receives prioritized cases and transmits actionable medical guidance back to the worker.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Safety & Clinical Guardrails -->
+  <div class="py-4 mb-4" id="safety">
+    <div class="card border-0 p-4" style="background-color: #FEF3C7; border-left: 6px solid #D97706 !important; border-radius: 12px;">
+      <div class="d-flex align-items-start gap-3">
+        <i class="bi bi-shield-exclamation fs-2 text-warning"></i>
+        <div>
+          <h5 class="fw-bold text-dark mb-1">Clinical Safety & Ethical AI Guardrail</h5>
+          <p class="mb-0 text-muted small">
+            AASHA is strictly designed to assist healthcare workers with documentation and priority triage routing. 
+            <strong>The AI does not autonomously diagnose diseases or prescribe medications.</strong> 
+            Emergency clinical decisions and treatment plans remain under the direct supervision of qualified Medical Officers.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

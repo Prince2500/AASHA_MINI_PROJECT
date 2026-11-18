@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Server Error – AASHA{% endblock %}
+
+{% block content %}
+<div class="container py-5 text-center">
+  <div class="py-5">
+    <div class="stat-icon red mx-auto mb-3" style="width: 72px; height: 72px; font-size: 2rem;">
+      <i class="bi bi-exclamation-octagon-fill"></i>
+    </div>
+    <h2 class="fw-bold text-dark mb-2">500 – System Processing Notice</h2>
+    <p class="text-muted mb-4">An error occurred while processing the clinical record. Please return to your dashboard or retry.</p>
+    <a href="{{ url_for('index') }}" class="btn btn-aasha">
+      <i class="bi bi-house-door-fill me-1"></i> Return to Homepage
+    </a>
+  </div>
+</div>
+{% endblock %}

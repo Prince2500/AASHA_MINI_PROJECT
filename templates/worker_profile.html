@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Worker Profile & Assigned Doctor – AASHA{% endblock %}
+
+{% block content %}
+<div class="container py-4">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      
+      <div class="card card-aasha p-4 shadow-sm">
+        <div class="d-flex align-items-center gap-3 border-bottom pb-3 mb-4">
+          <div class="stat-icon green" style="width: 52px; height: 52px;">
+            <i class="bi bi-person-gear"></i>
+          </div>
+          <div>
+            <h4 class="fw-bold text-dark mb-0">ASHA Worker Profile</h4>
+            <small class="text-muted">Manage your field jurisdiction and connected Primary Health Doctor</small>
+          </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('worker.profile') }}">
+          <div class="mb-3">
+            <label class="form-label fw-semibold small">Full Name</label>
+            <input type="text" name="full_name" class="form-control" value="{{ user.full_name }}" required>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Phone Number</label>
+              <input type="tel" name="phone" class="form-control" value="{{ user.phone }}" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label fw-semibold small">Email Address</label>
+              <input type="email" class="form-control bg-light" value="{{ user.email }}" readonly>
+            </div>
+          </div>
+
+          <div class="row g-2 mb-3">
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">Village</label>
+              <input type="text" name="village" class="form-control" value="{{ worker.village }}" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">District</label>
+              <input type="text" name="district" class="form-control" value="{{ worker.district }}" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label fw-semibold small">State</label>
+              <input type="text" name="state" class="form-control" value="{{ worker.state }}" required>
+            </div>
+          </div>
+
+          <!-- Doctor Assignment Selection -->
+          <div class="mb-4 p-3 rounded-3" style="background-color: var(--aasha-light-green);">
+            <label class="form-label fw-bold text-success small mb-1">
+              <i class="bi bi-hospital me-1"></i> Connect / Change Assigned Doctor
+            </label>
+            <select name="assigned_doctor_id" class="form-select form-select-sm">
+              <option value="">-- Select Medical Officer --</option>
+              {% for doc in doctors %}
+                <option value="{{ doc.id }}" {% if worker.assigned_doctor_id == doc.id %}selected{% endif %}>
+                  {{ doc.user.full_name }} ({{ doc.specialisation }} - {{ doc.hospital_centre }})
+                </option>
+              {% endfor %}
+            </select>
+            <div class="form-text text-muted" style="font-size: 0.74rem;">
+              All patient voice reports you submit will be immediately routed to this doctor.
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end gap-2">
+            <a href="{{ url_for('worker.dashboard') }}" class="btn btn-outline-secondary">Back</a>
+            <button type="submit" class="btn btn-aasha">Save Profile Changes</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
